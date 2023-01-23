@@ -116,7 +116,7 @@ jobs:
           tags: ${{ steps.queue_meta.outputs.tags }}
 
       - name: build and push Schedule Runner image
-        uses: .docker/build-push-action@v3
+        uses: docker/build-push-action@v3
         with:
           build-args: tag=${{ github.ref_name }}
           cache-from: |
