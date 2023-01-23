@@ -123,7 +123,6 @@ jobs:
             type=gha,scope=base
             type=gha,scope=schedule
           cache-to: type=gha,scope=schedule,mode=max
-          context: .docker
           file: .docker/schedule.Dockerfile
           push: true
           tags: ${{ steps.schedule_meta.outputs.tags }}
