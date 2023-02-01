@@ -71,7 +71,7 @@ jobs:
             type=ref,event=tag
 
       - name: build and push Base image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           cache-from: type=gha,scope=base
           cache-to: type=gha,scope=base,mode=max
@@ -80,7 +80,7 @@ jobs:
           tags: ${{ steps.base_meta.outputs.tags }}
 
       - name: build and push Webserver image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           build-args: tag=${{ github.ref_name }}
           cache-from: |
@@ -92,7 +92,7 @@ jobs:
           tags: ${{ steps.webserver_meta.outputs.tags }}
 
       - name: build and push App image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           build-args: tag=${{ github.ref_name }}
           cache-from: |
@@ -104,7 +104,7 @@ jobs:
           tags: ${{ steps.app_meta.outputs.tags }}
 
       - name: build and push Queue Worker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           build-args: tag=${{ github.ref_name }}
           cache-from: |
@@ -116,7 +116,7 @@ jobs:
           tags: ${{ steps.queue_meta.outputs.tags }}
 
       - name: build and push Schedule Runner image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           build-args: tag=${{ github.ref_name }}
           cache-from: |
