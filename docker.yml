@@ -10,8 +10,6 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
       - uses: docker/setup-buildx-action@v2
 
       - uses: docker/login-action@v2
@@ -24,7 +22,7 @@ jobs:
         id: base_meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{ github.repository }}/base
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'master') }}
             type=ref,event=branch
@@ -75,54 +73,54 @@ jobs:
         with:
           cache-from: type=gha,scope=base
           cache-to: type=gha,scope=base,mode=max
-          file: .docker/Dockerfile
+          file: .docker/build/Dockerfile
           push: true
           tags: ${{ steps.base_meta.outputs.tags }}
 
       - name: build and push Webserver image
         uses: docker/build-push-action@v4
         with:
-          build-args: tag=${{ github.ref_name }}
+          build-args: base_image_version=${{ github.ref_name }}
           cache-from: |
             type=gha,scope=base
             type=gha,scope=webserver
           cache-to: type=gha,scope=webserver,mode=max
-          file: .docker/webserver.Dockerfile
+          file: .docker/build/webserver.Dockerfile
           push: true
           tags: ${{ steps.webserver_meta.outputs.tags }}
 
       - name: build and push App image
         uses: docker/build-push-action@v4
         with:
-          build-args: tag=${{ github.ref_name }}
+          build-args: base_image_version=${{ github.ref_name }}
           cache-from: |
             type=gha,scope=base
             type=gha,scope=app
           cache-to: type=gha,scope=app,mode=max
-          file: .docker/app.Dockerfile
+          file: .docker/build/app.Dockerfile
           push: true
           tags: ${{ steps.app_meta.outputs.tags }}
 
       - name: build and push Queue Worker image
         uses: docker/build-push-action@v4
         with:
-          build-args: tag=${{ github.ref_name }}
+          build-args: base_image_version=${{ github.ref_name }}
           cache-from: |
             type=gha,scope=base
             type=gha,scope=queue
           cache-to: type=gha,scope=queue,mode=max
-          file: .docker/queue.Dockerfile
+          file: .docker/build/queue.Dockerfile
           push: true
           tags: ${{ steps.queue_meta.outputs.tags }}
 
       - name: build and push Schedule Runner image
         uses: docker/build-push-action@v4
         with:
-          build-args: tag=${{ github.ref_name }}
+          build-args: base_image_version=${{ github.ref_name }}
           cache-from: |
             type=gha,scope=base
             type=gha,scope=schedule
           cache-to: type=gha,scope=schedule,mode=max
-          file: .docker/schedule.Dockerfile
+          file: .docker/build/schedule.Dockerfile
           push: true
           tags: ${{ steps.schedule_meta.outputs.tags }}
